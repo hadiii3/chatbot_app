@@ -5,6 +5,7 @@ import 'package:chatbot_app/core/theme/app_theme.dart';
 import 'package:chatbot_app/features/vehicle/cubit/vehicle_cubit.dart';
 import 'package:chatbot_app/features/vehicle/cubit/vehicle_state.dart';
 import 'package:chatbot_app/features/vehicle/data/models/vehicle_permit.dart';
+import 'package:chatbot_app/core/utils/sanitizer.dart';
 
 class VehicleScreen extends StatefulWidget {
   const VehicleScreen({super.key});
@@ -43,11 +44,12 @@ class _VehicleScreenState extends State<VehicleScreen>
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
+      FocusScope.of(context).unfocus();
       context.read<VehicleCubit>().submitPermit(
-            licensePlate: _plateCtrl.text.trim(),
-            make: _makeCtrl.text.trim(),
-            model: _modelCtrl.text.trim(),
-            color: _colorCtrl.text.trim(),
+            licensePlate: InputSanitizer.sanitize(_plateCtrl.text),
+            make: InputSanitizer.sanitize(_makeCtrl.text),
+            model: InputSanitizer.sanitize(_modelCtrl.text),
+            color: InputSanitizer.sanitize(_colorCtrl.text),
           );
       _plateCtrl.clear();
       _makeCtrl.clear();

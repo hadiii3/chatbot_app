@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:chatbot_app/core/theme/app_theme.dart';
 import 'package:chatbot_app/features/auth/cubit/auth_cubit.dart';
 import 'package:chatbot_app/features/auth/cubit/auth_state.dart';
+import 'package:chatbot_app/core/utils/sanitizer.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,9 +48,10 @@ class _LoginScreenState extends State<LoginScreen>
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
+      FocusScope.of(context).unfocus();
       context.read<AuthCubit>().login(
-            studentId: _idCtrl.text.trim(),
-            password: _passwordCtrl.text,
+            studentId: InputSanitizer.sanitizeId(_idCtrl.text),
+            password: _passwordCtrl.text, // Passwords should not be altered
           );
     }
   }

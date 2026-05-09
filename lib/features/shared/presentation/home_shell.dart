@@ -12,6 +12,8 @@ import 'package:chatbot_app/features/dashboard/repositories/dashboard_repository
 import 'package:chatbot_app/features/vehicle/cubit/vehicle_cubit.dart';
 import 'package:chatbot_app/features/vehicle/presentation/screens/vehicle_screen.dart';
 import 'package:chatbot_app/features/vehicle/repositories/vehicle_repository.dart';
+import 'package:chatbot_app/features/auth/cubit/auth_cubit.dart' as chatbot_app;
+import 'package:chatbot_app/features/auth/cubit/auth_state.dart' as chatbot_app;
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -44,17 +46,25 @@ class _HomeShellState extends State<HomeShell> {
       ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark, // Dark icons for light theme
-        child: Scaffold(
-          backgroundColor: AppColors.canvas,
-          body: IndexedStack(
-            index: _currentIndex,
-            children: const [
-              DashboardScreen(),
-              ChatbotScreen(),
-              VehicleScreen(),
-            ],
+        child: BlocListener<chatbot_app.AuthCubit, chatbot_app.AuthState>(
+          listener: (context, state) {
+            if (state is chatbot_app.AuthUnauthenticated) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/onboarding', (route) => false);
+            }
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.canvas,
+            body: IndexedStack(
+              index: _currentIndex,
+              children: const [
+                DashboardScreen(),
+                ChatbotScreen(),
+                VehicleScreen(),
+              ],
+            ),
+            bottomNavigationBar: _buildNavBar(),
           ),
-          bottomNavigationBar: _buildNavBar(),
         ),
       ),
     );

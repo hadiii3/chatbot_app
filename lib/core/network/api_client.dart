@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:chatbot_app/core/constants/app_constants.dart';
+import 'package:chatbot_app/core/network/connectivity_interceptor.dart';
+import 'package:chatbot_app/core/network/rate_limit_interceptor.dart';
 
 class ApiClient {
   final Dio dio;
@@ -14,6 +16,11 @@ class ApiClient {
     };
     dio.options.connectTimeout = const Duration(seconds: 15);
     dio.options.receiveTimeout = const Duration(seconds: 15);
+
+    dio.interceptors.add(ConnectivityInterceptor());
+    dio.interceptors.add(RateLimitInterceptor(
+        maxRequests: 5, window: const Duration(seconds: 5)));
+
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
