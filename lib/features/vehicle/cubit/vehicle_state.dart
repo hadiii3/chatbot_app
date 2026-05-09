@@ -8,6 +8,10 @@ abstract class VehicleState extends Equatable {
   List<Object?> get props => [permits];
 }
 
+class VehicleLoading extends VehicleState {
+  const VehicleLoading() : super(const []);
+}
+
 class VehicleIdle extends VehicleState {
   const VehicleIdle(super.permits);
 }
@@ -22,7 +26,7 @@ class VehicleSubmitted extends VehicleState {
 
 class VehicleError extends VehicleState {
   final String message;
-  const VehicleError(super.permits, this.message);
+  const VehicleError(this.message) : super(const []);
   @override
   List<Object?> get props => [permits, message];
 }

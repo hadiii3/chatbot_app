@@ -9,7 +9,12 @@ class VehicleCubit extends Cubit<VehicleState> {
     _load();
   }
 
-  void _load() => emit(VehicleIdle(_repo.getPermits()));
+  Future<void> _load() async {
+    emit(const VehicleLoading());
+    final historyResult = await _repo.getPermits();
+    historyResult.fold((error) => emit(VehicleError(error)),
+        (permits) => emit(VehicleIdle(permits)));
+  }
 
   Future<void> submitPermit({
     required String licensePlate,
@@ -18,9 +23,9 @@ class VehicleCubit extends Cubit<VehicleState> {
     required String color,
   }) async {
     emit(VehicleSubmitting(state.permits));
-    await Future.delayed(const Duration(milliseconds: 800));
+
     final permit = VehiclePermit(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: 0,
       licensePlate: licensePlate.toUpperCase(),
       make: make,
       model: model,
@@ -28,9 +33,24 @@ class VehicleCubit extends Cubit<VehicleState> {
       status: PermitStatus.pending,
       requestedAt: DateTime.now(),
     );
-    await _repo.addPermit(permit);
-    emit(VehicleSubmitted(_repo.getPermits()));
-    await Future.delayed(const Duration(milliseconds: 200));
-    emit(VehicleIdle(_repo.getPermits()));
+
+    final result = await _repo.addPermit(permit);
+    result.fold((error) {
+      emit(VehicleError(error));
+      emit(VehicleIdle(state.permits)); // Revert to idle
+    }, (newPermit) async {
+      // Reload history to ensure consistency
+      final historyResult = await _repo.getPermits();
+      historyResult.fold(
+          (error) => emit(VehicleIdle([...state.permits, newPermit])),
+          (permits) => emit(VehicleSubmitted(permits)));
+
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      final finalHistoryResult = await _repo.getPermits();
+      finalHistoryResult.fold(
+          (error) => emit(VehicleIdle([...state.permits, newPermit])),
+          (permits) => emit(VehicleIdle(permits)));
+    });
   }
 }
