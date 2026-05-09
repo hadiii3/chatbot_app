@@ -439,22 +439,10 @@ class _DashboardBodyState extends State<_DashboardBody>
                       value: student.faculty,
                     ),
                     _DetailRow(
-                      icon: Icons.menu_book_rounded,
-                      iconColor: AppColors.guGold,
-                      label: 'Major',
-                      value: student.major,
-                    ),
-                    _DetailRow(
                       icon: Icons.mail_rounded,
                       iconColor: AppColors.info,
                       label: 'Email',
                       value: student.email,
-                    ),
-                    _DetailRow(
-                      icon: Icons.calendar_month_rounded,
-                      iconColor: AppColors.guNavy,
-                      label: 'Enrolled',
-                      value: '${student.enrollmentYear}',
                       isLast: true,
                     ),
                   ],

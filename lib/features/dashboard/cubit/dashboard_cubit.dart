@@ -8,12 +8,12 @@ class DashboardCubit extends Cubit<DashboardState> {
     loadDashboard();
   }
 
-  void loadDashboard() {
-    final student = _repo.getStudent();
-    if (student != null) {
-      emit(DashboardLoaded(student));
-    } else {
-      emit(const DashboardError('Could not load student data.'));
-    }
+  Future<void> loadDashboard() async {
+    emit(DashboardLoading());
+    final result = await _repo.getStudent();
+    result.fold(
+      (error) => emit(DashboardError(error)),
+      (student) => emit(DashboardLoaded(student)),
+    );
   }
 }

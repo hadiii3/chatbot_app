@@ -9,6 +9,14 @@ class DashboardLocalDataSource {
   StudentModel? getStudent() {
     final raw = _box.get(AppConstants.studentDataKey);
     if (raw == null) return null;
-    return StudentModel.fromMap(raw as Map<dynamic, dynamic>);
+    try {
+      return StudentModel.fromMap(Map<String, dynamic>.from(raw as Map));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> cacheStudent(StudentModel student) async {
+    await _box.put(AppConstants.studentDataKey, student.toMap());
   }
 }

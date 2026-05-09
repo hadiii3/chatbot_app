@@ -199,40 +199,47 @@ class _VehicleScreenState extends State<VehicleScreen>
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // ── New Permit CTA / Form ──────────────────────────────────
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                sliver: SliverToBoxAdapter(
-                  child: FadeTransition(
-                    opacity: CurvedAnimation(
-                      parent: _entranceCtrl,
-                      curve: const Interval(0.2, 0.6, curve: Curves.easeOut),
-                    ),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      switchInCurve: Curves.easeOutCubic,
-                      switchOutCurve: Curves.easeIn,
-                      child: _showForm
-                          ? _PermitForm(
-                              key: const ValueKey('form'),
-                              formKey: _formKey,
-                              plateCtrl: _plateCtrl,
-                              makeCtrl: _makeCtrl,
-                              modelCtrl: _modelCtrl,
-                              colorCtrl: _colorCtrl,
-                              isSubmitting: isSubmitting,
-                              onSubmit: _submit,
-                              onCancel: () => setState(() => _showForm = false),
-                            )
-                          : _NewPermitButton(
-                              key: const ValueKey('btn'),
-                              onTap: () => setState(() => _showForm = true),
-                            ),
+              if (!permits.any((p) =>
+                  p.status == PermitStatus.pending ||
+                  p.status == PermitStatus.approved))
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: FadeTransition(
+                      opacity: CurvedAnimation(
+                        parent: _entranceCtrl,
+                        curve: const Interval(0.2, 0.6, curve: Curves.easeOut),
+                      ),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        switchInCurve: Curves.easeOutCubic,
+                        switchOutCurve: Curves.easeIn,
+                        child: _showForm
+                            ? _PermitForm(
+                                key: const ValueKey('form'),
+                                formKey: _formKey,
+                                plateCtrl: _plateCtrl,
+                                makeCtrl: _makeCtrl,
+                                modelCtrl: _modelCtrl,
+                                colorCtrl: _colorCtrl,
+                                isSubmitting: isSubmitting,
+                                onSubmit: _submit,
+                                onCancel: () =>
+                                    setState(() => _showForm = false),
+                              )
+                            : _NewPermitButton(
+                                key: const ValueKey('btn'),
+                                onTap: () => setState(() => _showForm = true),
+                              ),
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              if (!permits.any((p) =>
+                  p.status == PermitStatus.pending ||
+                  p.status == PermitStatus.approved))
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // ── Permits list ──────────────────────────────────────────
               if (permits.isEmpty)
@@ -595,17 +602,19 @@ class _PermitCard extends StatelessWidget {
     PermitStatus.pending: AppColors.guGold,
     PermitStatus.approved: AppColors.guGreen,
     PermitStatus.rejected: AppColors.error,
+    PermitStatus.none: AppColors.textMuted,
   };
   static const _statusIcons = {
     PermitStatus.pending: Icons.hourglass_top_rounded,
     PermitStatus.approved: Icons.check_circle_rounded,
     PermitStatus.rejected: Icons.cancel_rounded,
+    PermitStatus.none: Icons.not_interested_rounded,
   };
 
   @override
   Widget build(BuildContext context) {
-    final color = _statusColors[permit.status]!;
-    final icon = _statusIcons[permit.status]!;
+    final color = _statusColors[permit.status] ?? AppColors.textMuted;
+    final icon = _statusIcons[permit.status] ?? Icons.help_outline;
 
     return Container(
       padding: const EdgeInsets.all(20),
