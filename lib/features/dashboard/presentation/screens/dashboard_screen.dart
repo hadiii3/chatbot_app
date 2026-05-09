@@ -464,7 +464,7 @@ class _DashboardBodyState extends State<_DashboardBody>
                 curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
               ),
               child: OutlinedButton.icon(
-                onPressed: () => context.read<AuthCubit>().logout(),
+                onPressed: () => _showLogoutSheet(context),
                 icon: const Icon(Icons.logout_rounded, size: 18),
                 label: const Text('Sign Out'),
                 style: OutlinedButton.styleFrom(
