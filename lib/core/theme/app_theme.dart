@@ -12,41 +12,38 @@ class AppColors {
   AppColors._();
 
   // ── Brand Identity ────────────────────────────────────────────────────────
-  static const Color guNavy = Color(0xFF12284C);
-  static const Color guGreen = Color(0xFF31B44B);
-  static const Color guGold = Color(0xFFFCB900);
+  static const Color guNavy = Color(0xFF192F59); // Primary Navy from CSS
+  static const Color guGreen = Color(0xFF31B44B); // Secondary Green from CSS
+  static const Color guGold = Color(0xFFFCB900); // Kept for legacy contrast
 
   // ── Canvas & Surfaces ─────────────────────────────────────────────────────
-  static const Color canvas = Color(0xFFF8F9FA); // Main app background
-  static const Color surface = Color(0xFFFFFFFF); // Cards and containers
+  static const Color canvas = Color(0xFFf8f9fa); // var(--col-surface)
+  static const Color surface = Color(0xFFffffff); // var(--col-surface-card)
   static const Color surfaceSubtle =
-      Color(0xFFF1F3F5); // Inputs, subtle backgrounds
+      Color(0xFFf3f4f5); // var(--col-surface-low)
   static const Color surfaceElevated = Color(0xFFFFFFFF); // Modals, popups
 
   // ── Text Hierarchy ────────────────────────────────────────────────────────
-  static const Color textPrimary =
-      Color(0xFF12284C); // Headings & primary body (using GU Navy for elegance)
-  static const Color textSecondary =
-      Color(0xFF495873); // Subtitles, secondary text
+  static const Color textPrimary = Color(0xFF191c1d); // var(--col-on-surface)
+  static const Color textSecondary = Color(0xFF43474f); // var(--col-on-muted)
   static const Color textMuted = Color(0xFF8A98AF); // Hints, inactive text
   static const Color textGhost = Color(0xFFADB5C2); // Very faint text
-  static const Color textOnDark =
-      Color(0xFFFFFFFF); // Text on green or navy backgrounds
+  static const Color textOnDark = Color(0xFFffffff); // var(--col-on-primary)
 
   // ── Semantic ──────────────────────────────────────────────────────────────
-  static const Color error = Color(0xFFE03131);
-  static const Color warning = Color(0xFFF08C00);
-  static const Color success = Color(0xFF2F9E44);
-  static const Color info = Color(0xFF1971C2);
+  static const Color error = Color(0xFFba1a1a); // var(--col-error)
+  static const Color warning = Color(0xFFf59e0b); // var(--col-warning)
+  static const Color success = Color(0xFF22c55e); // var(--col-success)
+  static const Color info = Color(0xFF4A90E2); // var(--col-accent)
 
   // ── Borders ───────────────────────────────────────────────────────────────
-  static const Color borderSubtle = Color(0xFFE9ECEF);
-  static const Color borderMedium = Color(0xFFDEE2E6);
+  static const Color borderSubtle = Color(0xFFd9dadb); // var(--col-surface-dim)
+  static const Color borderMedium = Color(0xFFc3c6d1); // var(--col-outline)
   static const Color borderDark = Color(0xFFCED4DA);
 
   // ── Gradients ─────────────────────────────────────────────────────────────
   static const LinearGradient greenGradient = LinearGradient(
-    colors: [Color(0xFF3DB166), Color(0xFF31B44B)],
+    colors: [Color(0xFF31B44B), Color(0xFF258a39)], // Secondary & Secondary-dim
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

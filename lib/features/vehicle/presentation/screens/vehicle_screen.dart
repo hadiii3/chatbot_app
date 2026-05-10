@@ -5,6 +5,7 @@ import 'package:chatbot_app/core/theme/app_theme.dart';
 import 'package:chatbot_app/features/vehicle/cubit/vehicle_cubit.dart';
 import 'package:chatbot_app/features/vehicle/cubit/vehicle_state.dart';
 import 'package:chatbot_app/features/vehicle/data/models/vehicle_permit.dart';
+import 'package:chatbot_app/core/utils/sanitizer.dart';
 
 class VehicleScreen extends StatefulWidget {
   const VehicleScreen({super.key});
@@ -43,11 +44,12 @@ class _VehicleScreenState extends State<VehicleScreen>
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
+      FocusScope.of(context).unfocus();
       context.read<VehicleCubit>().submitPermit(
-            licensePlate: _plateCtrl.text.trim(),
-            make: _makeCtrl.text.trim(),
-            model: _modelCtrl.text.trim(),
-            color: _colorCtrl.text.trim(),
+            licensePlate: InputSanitizer.sanitize(_plateCtrl.text),
+            make: InputSanitizer.sanitize(_makeCtrl.text),
+            model: InputSanitizer.sanitize(_modelCtrl.text),
+            color: InputSanitizer.sanitize(_colorCtrl.text),
           );
       _plateCtrl.clear();
       _makeCtrl.clear();
@@ -96,101 +98,58 @@ class _VehicleScreenState extends State<VehicleScreen>
 
           return CustomScrollView(
             slivers: [
-              // ── Header ────────────────────────────────────────────────
+              // ── Header (Dashboard style) ───────────────────────────────
               SliverToBoxAdapter(
-                child: FadeTransition(
-                  opacity: CurvedAnimation(
-                    parent: _entranceCtrl,
-                    curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
-                  ),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: AppColors.heroGradient,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: AppColors.borderSubtle,
-                          width: 1.0,
+                child: SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Campus Parking',
+                          style: GoogleFonts.dmSans(
+                            color: AppColors.textSecondary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ),
-                    child: SafeArea(
-                      bottom: false,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(height: 4),
+                        Text(
+                          'Vehicle Access',
+                          style: GoogleFonts.dmSans(
+                            color: AppColors.textPrimary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 52,
-                                  height: 52,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        AppColors.guGold.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: AppColors.guGold
-                                          .withValues(alpha: 0.2),
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                      Icons.directions_car_rounded,
-                                      color: AppColors.guGold,
-                                      size: 26),
-                                ),
-                                const SizedBox(width: 16),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Vehicle Access',
-                                      style: GoogleFonts.playfairDisplay(
-                                        color: AppColors.textPrimary,
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      'Campus parking permits',
-                                      style: GoogleFonts.dmSans(
-                                        color: AppColors.textSecondary,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            _StatChip(
+                              value: '${permits.length}',
+                              label: 'Total',
+                              color: AppColors.guNavy,
                             ),
-                            const SizedBox(height: 24),
-                            Row(
-                              children: [
-                                _StatChip(
-                                  value: '${permits.length}',
-                                  label: 'Total',
-                                  color: AppColors.guNavy,
-                                ),
-                                const SizedBox(width: 12),
-                                _StatChip(
-                                  value:
-                                      '${permits.where((p) => p.status == PermitStatus.approved).length}',
-                                  label: 'Approved',
-                                  color: AppColors.guGreen,
-                                ),
-                                const SizedBox(width: 12),
-                                _StatChip(
-                                  value:
-                                      '${permits.where((p) => p.status == PermitStatus.pending).length}',
-                                  label: 'Pending',
-                                  color: AppColors.guGold,
-                                ),
-                              ],
+                            const SizedBox(width: 12),
+                            _StatChip(
+                              value:
+                                  '${permits.where((p) => p.status == PermitStatus.approved).length}',
+                              label: 'Approved',
+                              color: AppColors.guGreen,
+                            ),
+                            const SizedBox(width: 12),
+                            _StatChip(
+                              value:
+                                  '${permits.where((p) => p.status == PermitStatus.pending).length}',
+                              label: 'Pending',
+                              color: AppColors.guGold,
                             ),
                           ],
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
@@ -199,9 +158,9 @@ class _VehicleScreenState extends State<VehicleScreen>
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // ── New Permit CTA / Form ──────────────────────────────────
-              if (!permits.any((p) =>
-                  p.status == PermitStatus.pending ||
-                  p.status == PermitStatus.approved))
+              if (state.currentPermit == null ||
+                  (state.currentPermit!.status != PermitStatus.pending &&
+                      state.currentPermit!.status != PermitStatus.approved))
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverToBoxAdapter(
@@ -236,9 +195,9 @@ class _VehicleScreenState extends State<VehicleScreen>
                   ),
                 ),
 
-              if (!permits.any((p) =>
-                  p.status == PermitStatus.pending ||
-                  p.status == PermitStatus.approved))
+              if (state.currentPermit == null ||
+                  (state.currentPermit!.status != PermitStatus.pending &&
+                      state.currentPermit!.status != PermitStatus.approved))
                 const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // ── Permits list ──────────────────────────────────────────
@@ -327,7 +286,7 @@ class _VehicleScreenState extends State<VehicleScreen>
                       (ctx, i) => Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: _PermitCard(
-                            permit: permits[permits.length - 1 - i]),
+                            permit: permits[i]),
                       ),
                       childCount: permits.length,
                     ),
@@ -358,32 +317,32 @@ class _StatChip extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.borderSubtle, width: 1.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            color: AppColors.guNavy,
+            blurRadius: 0,
+            offset: Offset(4, 4),
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             value,
-            style: GoogleFonts.dmSans(
+            style: GoogleFonts.playfairDisplay(
               color: color,
-              fontSize: 18,
+              fontSize: 32,
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(height: 2),
           Text(
             label,
             style: GoogleFonts.dmSans(
               color: AppColors.textSecondary,
               fontSize: 12,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -406,14 +365,14 @@ class _NewPermitButton extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppColors.guGreen.withValues(alpha: 0.3),
-            width: 1.5,
+            color: AppColors.guNavy,
+            width: 2.0,
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: AppColors.guGreen.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: AppColors.guNavy,
+              blurRadius: 0,
+              offset: Offset(4, 4),
             ),
           ],
         ),
