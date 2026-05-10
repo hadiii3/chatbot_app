@@ -70,155 +70,115 @@ class _DashboardBodyState extends State<_DashboardBody>
 
     return CustomScrollView(
       slivers: [
-        // ── Hero Header ──────────────────────────────────────────────────
+        // ── Header (Greeting) ──────────────────────────────────────────
         SliverToBoxAdapter(
-          child: FadeTransition(
-            opacity: CurvedAnimation(
-              parent: _entranceCtrl,
-              curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-            ),
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: AppColors.heroGradient,
-                border: Border(
-                  bottom: BorderSide(
-                    color: AppColors.borderSubtle,
-                    width: 1.0,
+          child: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    greeting,
+                    style: GoogleFonts.dmSans(
+                      color: AppColors.textSecondary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Dashboard',
+                    style: GoogleFonts.dmSans(
+                      color: AppColors.textPrimary,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ],
               ),
-              child: SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Top row: GU pill + avatar
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: AppColors.guNavy.withValues(alpha: 0.05),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: AppColors.guNavy.withValues(alpha: 0.1),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Image.asset(
-                                    'assets/images/gu_logo.png',
-                                    width: 16,
-                                    height: 16,
-                                    fit: BoxFit.contain,
-                                    errorBuilder: (_, __, ___) => const Icon(
-                                      Icons.school_rounded,
-                                      size: 14,
-                                      color: AppColors.guNavy,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'GALALA',
-                                  style: GoogleFonts.dmSans(
-                                    color: AppColors.guNavy,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-                          // Avatar
-                          GestureDetector(
-                            onTap: () => _showLogoutSheet(context),
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                gradient: AppColors.greenGradient,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.guGreen
-                                        .withValues(alpha: 0.25),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  student.firstName[0].toUpperCase(),
-                                  style: GoogleFonts.playfairDisplay(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
+            ),
+          ),
+        ),
 
-                      // Greeting
-                      Text(
-                        greeting,
-                        style: GoogleFonts.dmSans(
-                          color: AppColors.textSecondary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${student.firstName} ${student.lastName}',
-                        style: GoogleFonts.playfairDisplay(
-                          color: AppColors.textPrimary,
-                          fontSize: 34,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Badges
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          _Badge(
-                            icon: Icons.school_rounded,
-                            label: student.faculty,
-                            color: AppColors.guNavy,
-                            bgColor: AppColors.guNavy.withValues(alpha: 0.05),
-                            borderColor:
-                                AppColors.guNavy.withValues(alpha: 0.1),
-                          ),
-                          _Badge(
-                            icon: Icons.tag_rounded,
-                            label: student.studentIdNumber,
-                            color: AppColors.guGold,
-                            bgColor: AppColors.guGold.withValues(alpha: 0.1),
-                            borderColor:
-                                AppColors.guGold.withValues(alpha: 0.2),
-                          ),
-                        ],
-                      ),
-                    ],
+        // ── Identity Card (Gradient) ────────────────────────────────────
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverToBoxAdapter(
+            child: FadeTransition(
+              opacity: CurvedAnimation(
+                parent: _entranceCtrl,
+                curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.guNavy, Color(0xFF203D73)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          width: 2,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          student.firstName[0].toUpperCase(),
+                          style: GoogleFonts.dmSans(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${student.firstName} ${student.lastName}',
+                            style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              _IdentityBadge(
+                                icon: Icons.account_balance_rounded,
+                                label: student.faculty,
+                              ),
+                              _IdentityBadge(
+                                icon: Icons.badge_rounded,
+                                label: student.studentIdNumber,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -255,9 +215,9 @@ class _DashboardBodyState extends State<_DashboardBody>
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.02),
-                        blurRadius: 20,
-                        offset: const Offset(0, 4),
+                        color: AppColors.guNavy.withValues(alpha: 1.0),
+                        blurRadius: 0,
+                        offset: const Offset(4, 4), // Block shadow style
                       ),
                     ],
                   ),
@@ -266,44 +226,75 @@ class _DashboardBodyState extends State<_DashboardBody>
                     children: [
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: AppColors.guGreen.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(Icons.trending_up_rounded,
-                                size: 16, color: AppColors.guGreen),
-                          ),
-                          const SizedBox(width: 12),
+                          const Icon(Icons.star_rounded,
+                              size: 18, color: AppColors.guGold),
+                          const SizedBox(width: 8),
                           Text(
-                            'GRADUATION PROGRESS',
+                            'GPA & PROGRESS',
                             style: GoogleFonts.dmSans(
-                              fontSize: 11,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.textSecondary,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            '${(percent * 100).toInt()}%',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.guGreen,
+                              color: AppColors.guNavy,
+                              letterSpacing: 1.0,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            student.gpa.toStringAsFixed(2),
+                            style: GoogleFonts.playfairDisplay(
+                              color: AppColors.textPrimary,
+                              fontSize: 48,
+                              fontWeight: FontWeight.w800,
+                              height: 1,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '/ 4.0',
+                            style: GoogleFonts.dmSans(
+                              color: AppColors.textMuted,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
                       // Progress bar
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Credits',
+                            style: GoogleFonts.dmSans(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '${student.creditsCompleted} / ${student.creditsRequired}',
+                            style: GoogleFonts.dmSans(
+                              color: AppColors.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Stack(
                           children: [
                             Container(
-                              height: 10,
+                              height: 8,
                               decoration: BoxDecoration(
                                 color: AppColors.surfaceSubtle,
                                 borderRadius: BorderRadius.circular(8),
@@ -312,7 +303,7 @@ class _DashboardBodyState extends State<_DashboardBody>
                             FractionallySizedBox(
                               widthFactor: percent,
                               child: Container(
-                                height: 10,
+                                height: 8,
                                 decoration: BoxDecoration(
                                   gradient: AppColors.greenGradient,
                                   borderRadius: BorderRadius.circular(8),
@@ -322,56 +313,9 @@ class _DashboardBodyState extends State<_DashboardBody>
                           ],
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      Text(
-                        '${student.creditsCompleted} / ${student.creditsRequired} credits completed',
-                        style: GoogleFonts.dmSans(
-                          color: AppColors.textMuted,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
                     ],
                   ),
                 ),
-              ),
-            ),
-          ),
-        ),
-
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
-        // ── Stat Cards ───────────────────────────────────────────────────
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverToBoxAdapter(
-            child: FadeTransition(
-              opacity: CurvedAnimation(
-                parent: _entranceCtrl,
-                curve: const Interval(0.25, 0.7, curve: Curves.easeOut),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.star_rounded,
-                      iconColor: AppColors.guGold,
-                      label: 'GPA',
-                      value: student.gpa.toStringAsFixed(2),
-                      sub: 'out of 4.00',
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.check_circle_rounded,
-                      iconColor: AppColors.guGreen,
-                      label: 'Credits',
-                      value: '${student.creditsCompleted}',
-                      sub: 'completed',
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
@@ -399,9 +343,9 @@ class _DashboardBodyState extends State<_DashboardBody>
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.02),
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
+                      color: AppColors.guNavy.withValues(alpha: 1.0),
+                      blurRadius: 0,
+                      offset: const Offset(4, 4), // Block shadow style
                     ),
                   ],
                 ),
@@ -410,23 +354,16 @@ class _DashboardBodyState extends State<_DashboardBody>
                   children: [
                     Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColors.guNavy.withValues(alpha: 0.05),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(Icons.school_rounded,
-                              size: 16, color: AppColors.guNavy),
-                        ),
-                        const SizedBox(width: 12),
+                        const Icon(Icons.school_rounded,
+                            size: 18, color: AppColors.info),
+                        const SizedBox(width: 8),
                         Text(
                           'ACADEMIC DETAILS',
                           style: GoogleFonts.dmSans(
-                            fontSize: 11,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.textSecondary,
-                            letterSpacing: 1.5,
+                            color: AppColors.guNavy,
+                            letterSpacing: 1.0,
                           ),
                         ),
                       ],
@@ -563,36 +500,32 @@ class _DashboardBodyState extends State<_DashboardBody>
   }
 }
 
-// ── Badge ─────────────────────────────────────────────────────────────────────
-class _Badge extends StatelessWidget {
-  const _Badge({
+// ── Identity Badge ─────────────────────────────────────────────────────────────
+class _IdentityBadge extends StatelessWidget {
+  const _IdentityBadge({
     required this.icon,
     required this.label,
-    required this.color,
-    required this.bgColor,
-    required this.borderColor,
   });
   final IconData icon;
   final String label;
-  final Color color, bgColor, borderColor;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: bgColor,
+        color: Colors.white.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: color),
+          Icon(icon, size: 14, color: AppColors.info),
           const SizedBox(width: 6),
           Text(
             label,
             style: GoogleFonts.dmSans(
-              color: color,
+              color: AppColors.info,
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
@@ -603,79 +536,6 @@ class _Badge extends StatelessWidget {
   }
 }
 
-// ── Stat Card ─────────────────────────────────────────────────────────────────
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.iconColor,
-    required this.label,
-    required this.value,
-    required this.sub,
-  });
-  final IconData icon;
-  final Color iconColor;
-  final String label, value, sub;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.borderSubtle, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: iconColor, size: 20),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            value,
-            style: GoogleFonts.playfairDisplay(
-              color: AppColors.textPrimary,
-              fontSize: 32,
-              fontWeight: FontWeight.w800,
-              height: 1,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: GoogleFonts.dmSans(
-              color: AppColors.textSecondary,
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Text(
-            sub,
-            style: GoogleFonts.dmSans(
-              color: AppColors.textMuted,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // ── Detail Row ────────────────────────────────────────────────────────────────
 class _DetailRow extends StatelessWidget {
