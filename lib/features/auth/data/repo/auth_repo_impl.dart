@@ -1,12 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:chatbot_app/core/errors/exceptions.dart';
 import 'package:chatbot_app/features/auth/data/datasource/auth_local_datasource.dart';
+import 'package:chatbot_app/features/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:chatbot_app/features/auth/data/models/student_model.dart';
 import 'package:chatbot_app/features/auth/repositories/auth_repository.dart';
 
 class AuthRepoImpl implements AuthRepository {
-  final AuthLocalDataSource _dataSource;
-  AuthRepoImpl(this._dataSource);
+  final AuthLocalDataSource _localDataSource;
+  final AuthRemoteDataSource _remoteDataSource;
+
+  AuthRepoImpl(this._localDataSource, this._remoteDataSource);
 
   @override
   Future<Either<String, StudentModel>> login({
@@ -14,8 +17,13 @@ class AuthRepoImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      final student =
-          await _dataSource.login(studentId: studentId, password: password);
+      final data = await _remoteDataSource.login(
+          studentId: studentId, password: password);
+      final token = data['token'] as String;
+      final studentMap = data['student'] as Map<String, dynamic>;
+      final student = StudentModel.fromMap(studentMap);
+
+      await _localDataSource.cacheSession(token, student);
       return Right(student);
     } on AuthException catch (e) {
       return Left(e.message);
@@ -25,11 +33,14 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<void> logout() => _dataSource.logout();
+  Future<void> logout() async {
+    await _remoteDataSource.logout();
+    await _localDataSource.logout();
+  }
 
   @override
-  bool isLoggedIn() => _dataSource.isLoggedIn();
+  bool isLoggedIn() => _localDataSource.isLoggedIn();
 
   @override
-  StudentModel? getCachedStudent() => _dataSource.getCachedStudent();
+  StudentModel? getCachedStudent() => _localDataSource.getCachedStudent();
 }
