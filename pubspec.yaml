@@ -32,7 +32,7 @@ dependencies:
   dio: ^5.4.3+1
 
   # Fonts & Icons
-  google_fonts: ^8.1.0
+  google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
 
   # UI Extras
