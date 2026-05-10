@@ -3,6 +3,8 @@ import 'package:chatbot_app/core/network/api_client.dart';
 import 'package:chatbot_app/core/errors/exceptions.dart';
 import 'package:chatbot_app/features/vehicle/data/models/vehicle_permit.dart';
 
+import 'package:chatbot_app/core/constants/app_constants.dart';
+
 class VehicleRemoteDataSource {
   final ApiClient apiClient;
 
@@ -10,7 +12,8 @@ class VehicleRemoteDataSource {
 
   Future<VehiclePermit?> getCurrentVehicleState() async {
     try {
-      final response = await apiClient.get('/student/vehicle');
+
+      final response = await apiClient.get(ApiEndpoints.vehicleCurrent);
       if (response.statusCode == 200 && response.data['success'] == true) {
         if (response.data['status'] == 'none') {
           return null;
@@ -33,7 +36,8 @@ class VehicleRemoteDataSource {
 
   Future<List<VehiclePermit>> getVehicleHistory() async {
     try {
-      final response = await apiClient.get('/student/vehicle-requests/history');
+
+      final response = await apiClient.get(ApiEndpoints.vehicleHistory);
       if (response.statusCode == 200 && response.data['success'] == true) {
         final list = response.data['data'] as List;
         return list
@@ -60,7 +64,8 @@ class VehicleRemoteDataSource {
   }) async {
     try {
       final response = await apiClient.post(
-        '/student/vehicle-requests',
+
+        ApiEndpoints.vehicleRequest,
         data: {
           'vehicle_type': vehicleType,
           'vehicle_model': vehicleModel,
@@ -93,7 +98,8 @@ class VehicleRemoteDataSource {
         throw AuthException(
             e.response?.data['message'] ?? 'Failed to submit vehicle request');
       }
-      throw const AuthException('Network error while submitting vehicle request');
+      throw const AuthException(
+          'Network error while submitting vehicle request');
     }
   }
 }

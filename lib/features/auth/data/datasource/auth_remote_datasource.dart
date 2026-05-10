@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:chatbot_app/core/network/api_client.dart';
 import 'package:chatbot_app/core/errors/exceptions.dart';
+import 'package:chatbot_app/core/constants/app_constants.dart';
 
 class AuthRemoteDataSource {
   final ApiClient apiClient;
@@ -13,7 +14,8 @@ class AuthRemoteDataSource {
   }) async {
     try {
       final response = await apiClient.post(
-        '/student/login',
+
+        ApiEndpoints.login,
         data: {
           'student_id': studentId,
           'password': password,
@@ -34,7 +36,8 @@ class AuthRemoteDataSource {
 
   Future<void> logout() async {
     try {
-      await apiClient.post('/student/logout');
+
+      await apiClient.post(ApiEndpoints.logout);
     } catch (_) {
       // Ignore errors on logout
     }

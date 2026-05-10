@@ -3,6 +3,8 @@ import 'package:chatbot_app/core/network/api_client.dart';
 import 'package:chatbot_app/core/errors/exceptions.dart';
 import 'package:chatbot_app/features/auth/data/models/student_model.dart';
 
+import 'package:chatbot_app/core/constants/app_constants.dart';
+
 class DashboardRemoteDataSource {
   final ApiClient apiClient;
 
@@ -10,7 +12,8 @@ class DashboardRemoteDataSource {
 
   Future<StudentModel> getProfile() async {
     try {
-      final response = await apiClient.get('/student/profile');
+
+      final response = await apiClient.get(ApiEndpoints.profile);
       if (response.statusCode == 200 && response.data['success'] == true) {
         return StudentModel.fromMap(
             response.data['data'] as Map<String, dynamic>);

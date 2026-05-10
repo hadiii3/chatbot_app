@@ -7,7 +7,8 @@ class InputSanitizer {
     // Remove script tags, HTML tags, and potentially dangerous characters.
     String clean = input.replaceAll(RegExp(r'<[^>]*>|&[a-zA-Z0-9#]+;'), '');
     clean = clean.replaceAll(
-        RegExp(r'[' '"]'), ''); // Remove quotes that could break JSON/SQL
+
+        RegExp("['\"]"), ''); // Remove quotes that could break JSON/SQL
     return clean.trim();
   }
 

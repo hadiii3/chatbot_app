@@ -19,3 +19,19 @@ class AppConstants {
   static const String studentDataKey = 'student_data';
   static const String isLoggedInKey = 'is_logged_in';
 }
+
+class ApiEndpoints {
+  ApiEndpoints._();
+
+  // Auth
+  static const String login = '/student/login';
+  static const String logout = '/student/logout';
+
+  // Dashboard
+  static const String profile = '/student/profile';
+
+  // Vehicle
+  static const String vehicleCurrent = '/student/vehicle';
+  static const String vehicleHistory = '/student/vehicle-requests/history';
+  static const String vehicleRequest = '/student/vehicle-requests';
+}
