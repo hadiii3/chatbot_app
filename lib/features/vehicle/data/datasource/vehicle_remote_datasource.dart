@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:chatbot_app/core/network/api_client.dart';
 import 'package:chatbot_app/core/errors/exceptions.dart';
 import 'package:chatbot_app/features/vehicle/data/models/vehicle_permit.dart';
+
 import 'package:chatbot_app/core/constants/app_constants.dart';
 
 class VehicleRemoteDataSource {
@@ -11,6 +12,7 @@ class VehicleRemoteDataSource {
 
   Future<VehiclePermit?> getCurrentVehicleState() async {
     try {
+
       final response = await apiClient.get(ApiEndpoints.vehicleCurrent);
       if (response.statusCode == 200 && response.data['success'] == true) {
         if (response.data['status'] == 'none') {
@@ -34,6 +36,7 @@ class VehicleRemoteDataSource {
 
   Future<List<VehiclePermit>> getVehicleHistory() async {
     try {
+
       final response = await apiClient.get(ApiEndpoints.vehicleHistory);
       if (response.statusCode == 200 && response.data['success'] == true) {
         final list = response.data['data'] as List;
@@ -61,6 +64,7 @@ class VehicleRemoteDataSource {
   }) async {
     try {
       final response = await apiClient.post(
+
         ApiEndpoints.vehicleRequest,
         data: {
           'vehicle_type': vehicleType,

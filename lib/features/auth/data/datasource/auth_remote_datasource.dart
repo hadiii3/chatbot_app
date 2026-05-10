@@ -14,6 +14,7 @@ class AuthRemoteDataSource {
   }) async {
     try {
       final response = await apiClient.post(
+
         ApiEndpoints.login,
         data: {
           'student_id': studentId,
@@ -35,6 +36,7 @@ class AuthRemoteDataSource {
 
   Future<void> logout() async {
     try {
+
       await apiClient.post(ApiEndpoints.logout);
     } catch (_) {
       // Ignore errors on logout
