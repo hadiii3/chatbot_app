@@ -286,7 +286,7 @@ class _VehicleScreenState extends State<VehicleScreen>
                       (ctx, i) => Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: _PermitCard(
-                            permit: permits[i]),
+                            permit: permits[permits.length - 1 - i]),
                       ),
                       childCount: permits.length,
                     ),

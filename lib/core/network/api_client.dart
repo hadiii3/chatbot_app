@@ -9,7 +9,7 @@ class ApiClient {
   final Box<dynamic> authBox;
 
   ApiClient({required this.dio, required this.authBox}) {
-    dio.options.baseUrl = 'https://api.eightyeightevents.me/api/v1';
+    dio.options.baseUrl = AppConstants.apiBaseUrl;
     dio.options.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
