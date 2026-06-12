@@ -70,6 +70,7 @@ Future<void> setupInjection() async {
     () => VehicleRemoteDataSource(getIt<ApiClient>()),
   );
   getIt.registerLazySingleton<VehicleRepository>(
-    () => VehicleRepoImpl(getIt<VehicleLocalDataSource>(), getIt<VehicleRemoteDataSource>()),
+    () => VehicleRepoImpl(
+        getIt<VehicleLocalDataSource>(), getIt<VehicleRemoteDataSource>()),
   );
 }

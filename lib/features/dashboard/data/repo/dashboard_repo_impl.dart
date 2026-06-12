@@ -21,7 +21,8 @@ class DashboardRepoImpl implements DashboardRepository {
       if (cachedStudent != null) {
         return Right(cachedStudent);
       }
-      return const Left('Failed to load profile. Please check your internet connection.');
+      return const Left(
+          'Failed to load profile. Please check your internet connection.');
     }
   }
 }

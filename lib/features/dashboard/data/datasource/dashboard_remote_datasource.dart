@@ -12,7 +12,6 @@ class DashboardRemoteDataSource {
 
   Future<StudentModel> getProfile() async {
     try {
-
       final response = await apiClient.get(ApiEndpoints.profile);
       if (response.statusCode == 200 && response.data['success'] == true) {
         return StudentModel.fromMap(

@@ -41,7 +41,7 @@ class VehicleCubit extends Cubit<VehicleState> {
 
     final permit = VehiclePermit(
       id: 0,
-      licensePlate: licensePlate.toUpperCase(),
+      licensePlate: licensePlate,
       make: make,
       model: model,
       color: color,

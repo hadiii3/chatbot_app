@@ -423,6 +423,7 @@ class _DashboardBodyState extends State<_DashboardBody>
   }
 
   void _showLogoutSheet(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surface,
@@ -475,7 +476,7 @@ class _DashboardBodyState extends State<_DashboardBody>
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(ctx);
-                      context.read<AuthCubit>().logout();
+                      authCubit.logout();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.error,
@@ -535,7 +536,6 @@ class _IdentityBadge extends StatelessWidget {
     );
   }
 }
-
 
 // ── Detail Row ────────────────────────────────────────────────────────────────
 class _DetailRow extends StatelessWidget {

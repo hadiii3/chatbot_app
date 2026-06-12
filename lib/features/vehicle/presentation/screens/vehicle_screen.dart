@@ -159,8 +159,7 @@ class _VehicleScreenState extends State<VehicleScreen>
 
               // ── New Permit CTA / Form ──────────────────────────────────
               if (state.currentPermit == null ||
-                  (state.currentPermit!.status != PermitStatus.pending &&
-                      state.currentPermit!.status != PermitStatus.approved))
+                  state.currentPermit!.status != PermitStatus.pending)
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverToBoxAdapter(
@@ -196,8 +195,7 @@ class _VehicleScreenState extends State<VehicleScreen>
                 ),
 
               if (state.currentPermit == null ||
-                  (state.currentPermit!.status != PermitStatus.pending &&
-                      state.currentPermit!.status != PermitStatus.approved))
+                  state.currentPermit!.status != PermitStatus.pending)
                 const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // ── Permits list ──────────────────────────────────────────

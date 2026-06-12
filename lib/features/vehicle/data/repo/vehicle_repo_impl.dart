@@ -21,7 +21,8 @@ class VehicleRepoImpl implements VehicleRepository {
       if (cached.isNotEmpty) {
         return Right(cached);
       }
-      return const Left('Failed to load vehicle history. Please check your network connection.');
+      return const Left(
+          'Failed to load vehicle history. Please check your network connection.');
     }
   }
 
